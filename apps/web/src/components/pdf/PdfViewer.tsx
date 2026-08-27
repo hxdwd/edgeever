@@ -20,7 +20,6 @@ import { useTranslation } from "react-i18next";
 import { ButtonTooltip } from "@/components/ui/button-tooltip";
 import { cn } from "@/lib/utils";
 import { loadPdfJs } from "./pdfjs-loader";
-import { loadPdfDocumentSource } from "./pdf-document-source";
 
 const MIN_ZOOM = 0.5;
 const MAX_ZOOM = 2.5;
@@ -117,9 +116,7 @@ const PdfDocument = ({ url, active, fitWidth, zoom, onError }: PdfDocumentProps)
 
     void loadPdfJs().then(async (pdfjs) => {
       if (cancelled) return;
-      const source = await loadPdfDocumentSource(url);
-      if (cancelled) return;
-      loadingTask = pdfjs.getDocument(source);
+      loadingTask = pdfjs.getDocument({ url });
       const loadedDocument = await loadingTask.promise;
       if (cancelled) return;
       setDocument(loadedDocument);

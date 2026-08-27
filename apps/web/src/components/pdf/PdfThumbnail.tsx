@@ -5,7 +5,6 @@ import { memo, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { loadPdfJs } from "./pdfjs-loader";
-import { loadPdfDocumentSource } from "./pdf-document-source";
 import {
   calculatePdfThumbnailScale,
   isPdfThumbnailEligible,
@@ -74,9 +73,7 @@ export const PdfThumbnail = memo(({ url, label, byteSize, className }: PdfThumbn
       if (cancelled) return;
       const pdfjs = await loadPdfJs();
       if (cancelled) return;
-      const source = await loadPdfDocumentSource(url);
-      if (cancelled) return;
-      loadingTask = pdfjs.getDocument(source);
+      loadingTask = pdfjs.getDocument({ url });
       const document = await loadingTask.promise;
       const firstPage = await document.getPage(1);
       if (!cancelled) setPage(firstPage);
